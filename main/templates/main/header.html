@@ -7,10 +7,8 @@
 
     {% load staticfiles %}
     <link rel="stylesheet" type="text/css" href="{% static 'main/css/bootstrap.min.css' %}">
-    <!--TODO: static load of js (if it's possible)-->
-    <!--{% load static %}-->
-    <!--<script type="text/javascript" src="{ % static main/js/main.js %}"></script>  -- this whitespace between { and % is for django)-->
-    <script type="text/javascript" src="../../static/main/js/main.js"></script>
+    {% load static %}
+    <script type="text/javascript" src="{% static 'main/js/main.js' %}"></script>
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">

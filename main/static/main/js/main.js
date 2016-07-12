@@ -21,7 +21,6 @@
       }
       return results;
     })()).slice(-3);
-    console.log(tags);
     ref = (function() {
       var i, len, results;
       results = [];
