@@ -1,2 +1,6 @@
 # splitmoney
-Souce code for website ... *here should be a discription*
+Source code for website ... *here should be a description*
+
+## TODO
+* sending email
+* registration via email
