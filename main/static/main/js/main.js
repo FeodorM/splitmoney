@@ -16,6 +16,8 @@
       this.createInput = bind(this.createInput, this);
       this.valueChanged = bind(this.valueChanged, this);
       this.handleSubmit = bind(this.handleSubmit, this);
+      this.usersAreValid = bind(this.usersAreValid, this);
+      this.isInt = bind(this.isInt, this);
       this.addInput = bind(this.addInput, this);
       InputList.__super__.constructor.call(this, props);
       this.state = {
@@ -45,9 +47,34 @@
       });
     };
 
+    InputList.prototype.isInt = function(value) {
+      if (parseFloat(value) === parseInt(value) && !isNaN(value)) {
+        return true;
+      } else {
+        return false;
+      }
+    };
+
+    InputList.prototype.usersAreValid = function(users) {
+      var i, len, user;
+      for (i = 0, len = users.length; i < len; i++) {
+        user = users[i];
+        if (!(user.name.length && this.isInt(user.money))) {
+          return false;
+        }
+      }
+      return true;
+    };
+
     InputList.prototype.handleSubmit = function(e) {
+      var users;
       e.preventDefault();
-      return console.log(this.state.users);
+      users = this.state.users;
+      if (!this.usersAreValid(users)) {
+        return alert('Wrong Data.');
+      } else {
+
+      }
     };
 
     InputList.prototype.valueChanged = function(value, name, num) {

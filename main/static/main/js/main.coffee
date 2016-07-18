@@ -28,10 +28,26 @@ class InputList extends React.Component
         @setState
             users: newUsers
 
+    isInt: (value) =>
+        if parseFloat(value) == parseInt(value) and not isNaN(value)
+            true
+        else
+            false
+
+
+    usersAreValid: (users) =>
+        for user in users
+            return false unless user.name.length and @isInt user.money
+        true
+
     # TODO: ajax
     handleSubmit: (e) =>
         e.preventDefault()
-        console.log @state.users
+        users = @state.users
+        unless @usersAreValid users
+            alert 'Wrong Data.'
+        else
+            # ajax here
 
     valueChanged: (value, name, num) =>
         users = @state.users
