@@ -3,6 +3,35 @@ render = ReactDOM.render
 {div, button, form, input, br} = React.DOM
 
 
+### Нагугленная херня, которая должна была ~привести к равновесию~ заставить работать POST запросы, но не смогла
+
+getCookie = (name) ->
+  cookieValue = null
+  if document.cookie and document.cookie != ''
+    cookies = document.cookie.split(';')
+    i = 0
+    while i < cookies.length
+      cookie = jQuery.trim(cookies[i])
+      # Does this cookie string begin with the name we want?
+      if cookie.substring(0, name.length + 1) == name + '='
+        cookieValue = decodeURIComponent(cookie.substring(name.length + 1))
+        break
+      i++
+  cookieValue
+
+csrftoken = getCookie('csrftoken')
+
+csrfSafeMethod = (method) ->
+  # these HTTP methods do not require CSRF protection
+  /^(GET|HEAD|OPTIONS|TRACE)$/.test method
+
+$.ajaxSetup beforeSend: (xhr, settings) ->
+  if !csrfSafeMethod(settings.type) and !@crossDomain
+    xhr.setRequestHeader 'X-CSRFToken', csrftoken
+  return
+
+###
+
 class InputList extends React.Component
     constructor: (props) ->
         super props
@@ -47,7 +76,17 @@ class InputList extends React.Component
         unless @usersAreValid users
             alert 'Wrong Data.'
         else
-            # ajax here
+            $.ajax
+                url: '/ajax/'
+                method: 'GET'
+                dataType: 'json'
+                contentType: 'application/json; charset=utf-8'
+                data: JSON.stringify users
+                success: (data, textStatus, jqXHR) ->
+                    # code...
+                error: (jqXHR, textStatus, errorThrown) ->
+                    alert 'Something went wrong!'
+                    console.log 'Something went wrong!'
 
     valueChanged: (value, name, num) =>
         users = @state.users
