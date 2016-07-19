@@ -1,19 +1,44 @@
 from django.shortcuts import render
 from django.http import JsonResponse
-from pprint import pprint
 import json
+from pprint import pprint
+from typing import List, Tuple, Dict, Union
 
 
 def home(request):
     return render(request, "main/header.html")
 
 
-def split_money(request):
-    # pprint([i for i in dir(request) if not i.startswith("_")])
-    # pprint(json.loads('{"bla": "1", "asdasd": "23"}'))
-    for key in request.GET.keys():
-        users = json.loads(key)
-    pprint(users)
-    return JsonResponse({
-        # here should be nice response
-    })
+def split_money_view(request):
+    users = json.loads(next(iter(request.GET.keys())))
+    # print(type(users))
+    prettify_users(users)
+    _split_money(users)
+    # pprint(users)
+    return JsonResponse(users, safe=False)
+
+
+def prettify_users(users: List[Dict]): # -> List[Dict]:
+    """
+    Modify list of users in place.
+    Make 'money' int, remove 'num'
+    """
+    for user in users:
+        user['money'] = int(user['money'])
+        del user['num']
+
+
+def _split_money(data: List[Dict]): # -> List[Dict[str, Union[str, int]]]:
+    """
+    Calculate how much each man should give / get
+    :param data: List[
+        name -- name,
+        money -- how much money did he / she gave
+    ]
+    :return: list of dicts with keys 'name', 'to_pay', 'to_get'
+    """
+    whole_sum = sum(x['money'] for x in data)  # why sum takes no keyword arguments???
+    sum_per_man = whole_sum / len(data)
+    for user in data:
+        user['to_pay'] = sum_per_man - user['money']
+        del user['money']
