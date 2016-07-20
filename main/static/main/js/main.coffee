@@ -83,7 +83,10 @@ class InputList extends React.Component
                 contentType: 'application/json; charset=utf-8'
                 data: JSON.stringify users
                 success: (data, textStatus, jqXHR) ->
-                    # code...
+                    render(
+                        Output {data}
+                        $('#main')[0]
+                    )
                 error: (jqXHR, textStatus, errorThrown) ->
                     alert 'Something went wrong!'
                     console.log 'Something went wrong!'
@@ -103,7 +106,7 @@ class InputList extends React.Component
     render: ->
         inputs = @state.users.map @createInput
         form { className: 'InputList', onSubmit: @handleSubmit }, inputs.concat [
-            Button { text: '+', type: 'button', onClick: @addInput }
+            Button { text: '+', onClick: @addInput }
             br {}
             Button { text: 'Split Money', type: 'submit'}
         ]
@@ -154,6 +157,28 @@ class Button extends React.Component
             onClick: @props.onClick ? () ->,
             @props.text
 Button = React.createFactory Button
+
+
+class Output extends React.Component
+    prettify: (user) ->
+        toPay = parseInt user.to_pay
+        whatToDo =
+            if toPay > 0
+                "-> #{toPay}"
+            else if toPay == 0
+                "owes nothing"
+            else
+                "<- #{Math.abs toPay}"
+        OutputItem { text: "#{user.name} #{whatToDo}" }
+    render: ->
+        div { className: 'Output' }, @props.data.map @prettify
+Output = React.createFactory Output
+
+
+class OutputItem extends React.Component
+    render: ->
+        div { className: 'OutputItem' }, @props.text
+OutputItem = React.createFactory OutputItem
 
 
 render(

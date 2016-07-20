@@ -11,7 +11,6 @@ def home(request):
 
 def split_money_view(request):
     users = json.loads(next(iter(request.GET.keys())))
-    # print(type(users))
     prettify_users(users)
     _split_money(users)
     # pprint(users)
