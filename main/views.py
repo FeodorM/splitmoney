@@ -7,8 +7,15 @@ from .forms import MainFormSet
 
 
 def home(request):
-    forms = MainFormSet()
-    context = {"forms": forms}
+    formSet =  MainFormSet()
+    if request.method == "POST":
+        formSet = MainFormSet(request.POST)
+        if formSet.is_valid():
+            for form in formSet:
+                if form.is_valid():
+                    for key, value in form.cleaned_data.items():
+                        print (key+'-'*3+value+'\n'+'-'*15)
+    context = {"formSet": formSet}
     return render(request, "main/header.html", context)
 
 

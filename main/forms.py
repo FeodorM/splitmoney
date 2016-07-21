@@ -5,4 +5,4 @@ class MainForm(forms.Form):
     name = forms.CharField()
     amount = forms.CharField()
 
-MainFormSet = formset_factory(MainForm)
+MainFormSet = formset_factory(MainForm, extra = 2)

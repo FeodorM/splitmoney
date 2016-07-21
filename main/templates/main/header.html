@@ -17,17 +17,20 @@
 </head>
 
 <body>
+    <div class="container">
     {% block content %}
-    <form method="POST" action="">{% csrf_token %}
-      <div>
-        {% for form in forms %}
-            {{ form.as_p }}
-        {% endfor %}
+    <form method="POST" action=""> {% csrf_token %}
+    {{ formSet.management_form }}
+    {% for form in formSet %}
+      <div class="col-xs-6 col-sm-3">
+        {{ form.as_p }}
       </div>
-      <button id="new_person">Add user</button>
-      <input type="submit" value="Ok" class="btn">
+    {% endfor %}
+    <button id="new_person">+</button>
+    <input type="submit" value="Ok" class="btn">
     </form>
     {% endblock %}
+    </div>
     {% load static %}
     <script type="text/javascript" src="{% static 'main/js/main.js' %}"></script>
 </body>
