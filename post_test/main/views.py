@@ -3,13 +3,10 @@ from django.http import JsonResponse
 import json
 from pprint import pprint
 from typing import List, Tuple, Dict, Union
-from .forms import MainFormSet
 
 
 def home(request):
-    forms = MainFormSet()
-    context = {"forms": forms}
-    return render(request, "main/header.html", context)
+    return render(request, "main/header.html")
 
 
 def split_money_view(request):

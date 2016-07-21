@@ -1,8 +1,8 @@
 from django.conf.urls import url, include
 
-from . import views
+from .views import split_money_view, home
 
 urlpatterns = [
-    url(r'^ajax/', views.split_money_view, name='split_money'),
-    url(r'^$', views.home, name='home')
+    url(r'^ajax/', split_money_view, name='split_money'),
+    url(r'^$', home, name='home')
 ]
