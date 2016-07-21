@@ -1,25 +1,13 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
+{% extends 'main/base.html' %}
 
-    <title>Split Money</title>
+{% block content %}
+<!-- some libs -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.2.1/react.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.2.1/react-dom.js"></script>
+<script src="https://code.jquery.com/jquery-2.2.0.js"></script>
 
-    {% load staticfiles %}
-    <link rel="stylesheet" type="text/css" href="{% static 'main/css/bootstrap.min.css' %}">
+<div id="main"></div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.2.1/react.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.2.1/react-dom.js"></script>
-    <script src="https://code.jquery.com/jquery-2.2.0.js"></script>
-
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-</head>
-
-<body>
-    <div id="main"></div>
-    {% load static %}
-    <script type="text/javascript" src="{% static 'main/js/main.js' %}"></script>
-</body>
-
-</html>
+{% load static %}
+<script type="text/javascript" src="{% static 'main/js/main.js' %}"></script>
+{% endblock %}
