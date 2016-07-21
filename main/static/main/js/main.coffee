@@ -3,7 +3,7 @@ render = ReactDOM.render
 {div, button, form, input, br} = React.DOM
 
 
-### Нагугленная херня, которая должна была ~привести к равновесию~ заставить работать POST запросы, но не смогла
+# Нагугленная херня, которая заработала
 
 getCookie = (name) ->
   cookieValue = null
@@ -26,11 +26,16 @@ csrfSafeMethod = (method) ->
   /^(GET|HEAD|OPTIONS|TRACE)$/.test method
 
 $.ajaxSetup beforeSend: (xhr, settings) ->
-  if !csrfSafeMethod(settings.type) and !@crossDomain
-    xhr.setRequestHeader 'X-CSRFToken', csrftoken
-  return
+  if not csrfSafeMethod(settings.type) and not @crossDomain
+      xhr.setRequestHeader 'X-CSRFToken', csrftoken
 
-###
+
+start = () ->
+    render(
+        InputList {}
+        $('#main')[0]
+    )
+
 
 class InputList extends React.Component
     constructor: (props) ->
@@ -38,8 +43,8 @@ class InputList extends React.Component
         @state =
             users: [
                 {
-                    name: ''
-                    money: ''
+                    name: 'feodor'
+                    money: '1000'
                     num: 0
                 }
             ]
@@ -78,17 +83,20 @@ class InputList extends React.Component
         else
             $.ajax
                 url: '/ajax/'
-                method: 'GET'
+                method: 'POST'
                 dataType: 'json'
-                contentType: 'application/json; charset=utf-8'
-                data: JSON.stringify users
+                # contentType: 'application/json; charset=utf-8'
+                # processData: false
+                data:
+                    users: JSON.stringify users
+                    #JSON.stringify
                 success: (data, textStatus, jqXHR) ->
                     render(
                         Output {data}
                         $('#main')[0]
                     )
                 error: (jqXHR, textStatus, errorThrown) ->
-                    alert 'Something went wrong!'
+                    alert "Something went wrong!\nError: #{errorThrown}"
                     console.log 'Something went wrong!'
 
     valueChanged: (value, name, num) =>
@@ -171,7 +179,9 @@ class Output extends React.Component
                 "<- #{Math.abs toPay}"
         OutputItem { text: "#{user.name} #{whatToDo}" }
     render: ->
-        div { className: 'Output' }, @props.data.map @prettify
+        div { className: 'Output' }, @props.data.map(@prettify).concat [
+            Button { onClick: start, text: 'Start Again' }
+        ]
 Output = React.createFactory Output
 
 
@@ -183,11 +193,7 @@ OutputItem = React.createFactory OutputItem
 
 render(
     Button
-        onClick: () ->
-            render(
-                InputList {}
-                $('#main')[0]
-            )
+        onClick: start
         text: 'Start',
     $('#main')[0]
 )

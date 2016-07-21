@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponseServerError
 import json
 from pprint import pprint
 from typing import List, Tuple, Dict, Union
@@ -10,11 +10,14 @@ def home(request):
 
 
 def split_money_view(request):
-    users = json.loads(next(iter(request.GET.keys())))
-    prettify_users(users)
-    _split_money(users)
-    # pprint(users)
-    return JsonResponse(users, safe=False)
+    if request.method == 'POST':
+        users = json.loads(request.POST['users'])
+        prettify_users(users)
+        _split_money(users)
+        # pprint(users)
+        return JsonResponse(users, safe=False)
+    else:
+        return HttpResponseServerError('Wrong method')
 
 
 def prettify_users(users: List[Dict]): # -> List[Dict]:
