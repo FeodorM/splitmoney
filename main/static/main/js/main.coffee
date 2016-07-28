@@ -43,8 +43,8 @@ class InputList extends React.Component
         @state =
             users: [
                 {
-                    name: 'feodor'
-                    money: '1000'
+                    name: ''
+                    money: ''
                     num: 0
                 }
             ]
