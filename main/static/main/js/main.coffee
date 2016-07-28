@@ -1,6 +1,6 @@
 render = ReactDOM.render
 
-{div, button, form, input, br} = React.DOM
+{div, button, form, input, br, label, hr, center} = React.DOM
 
 
 # Нагугленная херня, которая заработала
@@ -68,13 +68,11 @@ class InputList extends React.Component
         else
             false
 
-
     usersAreValid: (users) =>
         for user in users
             return false unless user.name.length and @isInt user.money
         true
 
-    # TODO: ajax
     handleSubmit: (e) =>
         e.preventDefault()
         users = @state.users
@@ -113,10 +111,10 @@ class InputList extends React.Component
 
     render: ->
         inputs = @state.users.map @createInput
-        form { className: 'InputList', onSubmit: @handleSubmit }, inputs.concat [
-            Button { text: '+', onClick: @addInput }
-            br {}
-            Button { text: 'Split Money', type: 'submit'}
+        form { className: 'col-xs-12', onSubmit: @handleSubmit }, inputs.concat [
+            Button { text: '+', onClick: @addInput, key: 'plus-button' }
+            br { key: 'br' }
+            Button { text: 'Split Money', type: 'submit', key: 'submit-button' }
         ]
 InputList = React.createFactory InputList
 
@@ -141,29 +139,52 @@ class Input extends React.Component
             money: value
 
     render: ->
-        div { className: 'Input' }, [
-            # br {}
-            input
-                type: 'text'
-                placeholder: 'Ivan Ivanov'
-                value: @state.name
-                onChange: @handleNameChange
-            input
-                type: 'text'
-                placeholder: '1488'
-                value: @state.money
-                onChange: @handleMoneyChange
+        div { className: 'col-xs-12' }, [
+            div { className: 'form-group', key: 'name-div' }, [
+                label
+                    htmlFor: "input-name#{@props.num}"
+                    key: 'label'
+                    , 'Name'
+                input
+                    id: "input-name#{@props.num}"
+                    className: 'form-control'
+                    key: 'input'
+
+                    type: 'text'
+                    placeholder: 'Ivan Ivanov'
+                    value: @state.name
+                    onChange: @handleNameChange
+            ]
+            div { className: 'form-group', key: 'amount-div' }, [
+                label
+                    htmlFor: "input-amount#{@props.num}"
+                    key: 'label'
+                    , 'Amount'
+                input
+                    id: "input-amount#{@props.num}"
+                    className: 'form-control'
+                    key: 'input'
+
+                    type: 'text'
+                    placeholder: '1488'
+                    value: @state.money
+                    onChange: @handleMoneyChange
+            ]
+            hr { key: 'hr' }
         ]
 Input = React.createFactory Input
 
 
 class Button extends React.Component
     render: ->
-        button
-            className: 'Button'
-            type: @props.type ? 'button'
-            onClick: @props.onClick ? () ->,
-            @props.text
+        div { className: 'col-xs-12 text-center' }, [
+            button
+                key: 'button'
+                className: 'btn btn-default'
+                type: @props.type ? 'button'
+                onClick: @props.onClick ? () ->,
+                @props.text
+        ]
 Button = React.createFactory Button
 
 
@@ -177,17 +198,18 @@ class Output extends React.Component
                 "owes nothing"
             else
                 "<- #{Math.abs toPay}"
-        OutputItem { text: "#{user.name} #{whatToDo}" }
+        OutputItem { text: "#{user.name} #{whatToDo}", key: user.name }
+
     render: ->
-        div { className: 'Output' }, @props.data.map(@prettify).concat [
-            Button { onClick: start, text: 'Start Again' }
+        div { className: 'list-group' }, @props.data.map(@prettify).concat [
+            Button { onClick: start, text: 'Start Again', key: 'btn' }
         ]
 Output = React.createFactory Output
 
 
 class OutputItem extends React.Component
     render: ->
-        div { className: 'OutputItem' }, @props.text
+        div { className: 'list-group-item' }, @props.text
 OutputItem = React.createFactory OutputItem
 
 
